@@ -1,5 +1,6 @@
 TIMEOUT_MAX = 3
 HEADER = {"user-agent": "Fake user-agent"}
+URL = "https://blog.betrybe.com/"
 
 
 # *URL's

@@ -1,5 +1,6 @@
-import tech_news.utils as utils
 from parsel import Selector
+from tech_news.database import create_news
+import tech_news.utils as utils
 import requests
 import time
 
@@ -62,4 +63,19 @@ def scrape_noticia(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    html_content = fetch(utils.URL)
+    novidades = scrape_novidades(html_content)
+    news = list()
+
+    while amount >= 1:
+        for url in novidades[:amount]:
+            html = fetch(url)
+            news.append(scrape_noticia(html))
+            amount -= 1
+        if amount >= 1:
+            next_page_link = scrape_next_page_link(html_content)
+            html_content = fetch(next_page_link)
+            novidades = scrape_novidades(html_content)
+
+    create_news(news)
+    return news

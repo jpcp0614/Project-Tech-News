@@ -1,4 +1,5 @@
-from tech_news.utils import TIMEOUT_MAX, HEADER
+import tech_news.utils as utils
+from parsel import Selector
 import requests
 import time
 
@@ -6,7 +7,11 @@ import time
 # Requisito 1
 def fetch(url):
     try:
-        response = requests.get(url, timeout=TIMEOUT_MAX, headers=HEADER)
+        response = requests.get(
+            url,
+            timeout=utils.TIMEOUT_MAX,
+            headers=utils.HEADER,
+            )
         time.sleep(1)
         response.raise_for_status()
     except (requests.Timeout, requests.HTTPError):
@@ -18,7 +23,12 @@ def fetch(url):
 
 # Requisito 2
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    noticias = selector.css(utils.URLS["NOTICIAS"]).getall()
+
+    if not noticias:
+        return list()
+    return noticias
 
 
 # Requisito 3

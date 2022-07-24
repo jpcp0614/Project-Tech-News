@@ -5,4 +5,5 @@ HEADER = {"user-agent": "Fake user-agent"}
 # *URL's
 URLS = {
     "NOTICIAS": "div.cs-overlay a ::attr(href)",
+    "NEXT_PAGE": "a.next ::attr(href)",
 }

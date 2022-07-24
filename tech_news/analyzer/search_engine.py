@@ -1,22 +1,23 @@
 from tech_news.database import search_news
+from tech_news.analyzer.formatted import formatted
+from datetime import datetime
 
 
 # Requisito 6
 def search_by_title(title):
     data = search_news({"title": {"$regex": title, "$options": "i"}})
-
-    formatted_list = list()
-
-    for news in data:
-        formatted_title_url = (news["title"], news["url"])
-        formatted_list.append(formatted_title_url)
-
-    return formatted_list
+    return formatted(data)
 
 
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    try:
+        input = datetime.fromisoformat(date)
+        searchDate = datetime.strftime(input, "%d/%m/%Y")
+        data = search_news({"timestamp": searchDate})
+        return formatted(data)
+    except ValueError:
+        raise ValueError('Data inválida')
 
 
 # Requisito 8

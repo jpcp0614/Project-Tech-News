@@ -24,7 +24,7 @@ def fetch(url):
 # Requisito 2
 def scrape_novidades(html_content):
     selector = Selector(html_content)
-    noticias = selector.css(utils.URLS["NOTICIAS"]).getall()
+    noticias = selector.css(utils.SELECTORS["NEWS"]).getall()
 
     if not noticias:
         return list()
@@ -34,7 +34,7 @@ def scrape_novidades(html_content):
 # Requisito 3
 def scrape_next_page_link(html_content):
     selector = Selector(html_content)
-    next_page = selector.css(utils.URLS["NEXT_PAGE"]).get()
+    next_page = selector.css(utils.SELECTORS["NEXT_PAGE"]).get()
 
     if not next_page:
         return None
@@ -43,7 +43,21 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+    news = dict()
+
+    news["url"] = selector.css(utils.SELECTORS["URL"]).get()
+    news["title"] = selector.css(utils.SELECTORS["TITLE"]).get().strip()
+    news["timestamp"] = selector.css(utils.SELECTORS["TIMESTAMP"]).get()
+    news["writer"] = selector.css(utils.SELECTORS["WRITER"]).get()
+    news["comments_count"] = len(
+        selector.css(utils.SELECTORS["COMMENTS_COUNT"]).getall())
+    news["summary"] = "".join(
+        selector.css(utils.SELECTORS["SUMMARY"]).getall()).strip()
+    news["tags"] = selector.css(utils.SELECTORS["TAGS"]).getall()
+    news["category"] = selector.css(utils.SELECTORS["CATEGORY"]).get()
+
+    return news
 
 
 # Requisito 5
